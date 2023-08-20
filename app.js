@@ -5,7 +5,7 @@ const cardsRouter = require('./routes/cards');
 const { NotFoundError } = require('./utils/errors');
 
 const {
-  PORT = 8080,
+  PORT = 3000,
   DB_URL = 'mongodb://localhost:27017/mestodb',
   DB_USER = 'admin',
   DB_PASSWORD = 'admin',
