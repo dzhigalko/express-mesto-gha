@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const { NotFoundError } = require('./utils/errors');
+const constants = require('./utils/constants');
 
 const {
   PORT = 3000,
@@ -26,12 +27,18 @@ app.use('/cards', cardsRouter);
 
 app.use((err, req, res, _) => {
   if (err instanceof mongoose.Error.ValidationError) {
-    res.status(400).send({ message: 'Validation error', fields: err.errors });
+    res.status(constants.HTTP_BAD_REQUEST).send({message: err.message});
+  } else if (err instanceof mongoose.Error.CastError) {
+    res.status(constants.HTTP_BAD_REQUEST).send({message: err.message});
   } else if (err instanceof NotFoundError) {
-    res.status(404).send({ message: err.message });
+    res.status(constants.HTTP_NOT_FOUND).send({message: err.message});
   } else {
-    res.status(500).send({ message: 'Something went wrong' });
+    res.status(constants.HTTP_SERVER_ERROR).send({ message: 'Something went wrong' });
   }
+});
+
+app.use((req, res) => {
+  res.status(constants.HTTP_NOT_FOUND).send({ message: `Path ${req.path} not found` });
 });
 
 mongoose.connect(DB_URL, {
