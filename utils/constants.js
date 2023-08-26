@@ -5,6 +5,7 @@ const HTTP_CREATED = 201;
 const HTTP_UNAUTHORIZED = 401;
 const HTTP_CONFLICT = 409;
 const HTTP_FORBIDDEN = 403;
+const UrlRegex = /^https?:\/\/[a-zA-Z-]+(\.[a-zA-Z-]+)+(\/[a-zA-Z-]*)*$/;
 
 module.exports = {
   HTTP_NOT_FOUND,
@@ -14,4 +15,5 @@ module.exports = {
   HTTP_UNAUTHORIZED,
   HTTP_CONFLICT,
   HTTP_FORBIDDEN,
+  UrlRegex,
 };

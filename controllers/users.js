@@ -17,7 +17,7 @@ const createUser = [
       password: Joi.string().required().min(4),
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
-      avatar: Joi.string().required().uri(),
+      avatar: Joi.string().regex(constants.UrlRegex),
     }),
   }),
   (req, res, next) => {
@@ -79,7 +79,7 @@ const updateCurrentUser = [
 const updateCurrentUserAvatar = [
   celebrate({
     body: Joi.object().keys({
-      avatar: Joi.string().required().uri(),
+      avatar: Joi.string().required().regex(constants.UrlRegex),
     }),
   }),
   (req, res, next) => {
