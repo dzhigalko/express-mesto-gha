@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors: celebrateErrors } = require('celebrate');
-const helmet = require('helmet');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 const { login, createUser } = require('./controllers/users');
@@ -18,7 +17,6 @@ const {
 
 const app = express();
 
-app.use(helmet());
 app.use(express.json());
 app.use((req, res, next) => {
   req.jwtSecret = JWT_SECRET_KEY;
