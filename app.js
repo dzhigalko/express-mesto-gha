@@ -31,12 +31,10 @@ app.post('/signup', ...createUser);
 app.use('/users', auth, usersRouter);
 app.use('/cards', auth, cardsRouter);
 
-app.use((req, _ , next) => next(new NotFoundError(`Path ${req.path} not found`)));
-
+app.use((req, _, next) => next(new NotFoundError(`Path ${req.path} not found`)));
 
 app.use(celebrateErrors());
 app.use(errors);
-
 
 mongoose.connect(DB_URL, {
   useNewUrlParser: true,
