@@ -1,6 +1,7 @@
 const { celebrate, Joi } = require('celebrate');
 const Card = require('../models/card');
 const NotFoundError = require('../utils/NotFoundError');
+const UnauthorizedError = require('../utils/UnauthorizedError');
 const constants = require('../utils/constants');
 
 const getCards = (req, res, next) => {
@@ -42,12 +43,12 @@ const deleteCard = [
       .orFail(() => new NotFoundError('Card not found'))
       .then((card) => {
         if (card.owner.toString() !== userId) {
-          return res.status(constants.HTTP_FORBIDDEN).send({ message: 'Невозможно удалить чужую карточку' });
+          return Promise.reject(new UnauthorizedError('User doesn\'t have access to delete card'));
         }
 
         return card;
       })
-      .then((card) => Card.findByIdAndRemove(card._id))
+      .then((card) => Card.deleteOne(card))
       .then((card) => res.send(card))
       .catch(next);
   },

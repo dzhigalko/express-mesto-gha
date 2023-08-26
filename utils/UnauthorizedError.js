@@ -1,5 +1,5 @@
-class UnAuthorizedError extends Error {
+class UnauthorizedError extends Error {
 
 }
 
-module.exports = UnAuthorizedError;
+module.exports = UnauthorizedError;

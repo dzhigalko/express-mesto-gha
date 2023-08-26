@@ -102,7 +102,7 @@ const login = [
       password: Joi.string().required().min(4),
     }),
   }),
-  (req, res) => {
+  (req, res, next) => {
     const { jwtSecret, jwtTTL } = req;
     const { email, password } = req.body;
 
@@ -111,9 +111,7 @@ const login = [
         const token = jwt.sign({ _id: user._id }, jwtSecret, { expiresIn: jwtTTL });
         res.send({ token });
       })
-      .catch((err) => {
-        res.status(constants.HTTP_UNAUTHORIZED).send({ message: err.message });
-      });
+      .catch(next);
   },
 ];
 

@@ -1,12 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { errors: celebrateErrors } = require('celebrate');
+const helmet = require('helmet');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
-const constants = require('./utils/constants');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const errors = require('./middlewares/errors');
+const NotFoundError = require('./utils/NotFoundError');
 
 const {
   PORT = 3000,
@@ -17,6 +18,7 @@ const {
 
 const app = express();
 
+app.use(helmet());
 app.use(express.json());
 app.use((req, res, next) => {
   req.jwtSecret = JWT_SECRET_KEY;
@@ -32,9 +34,7 @@ app.use('/cards', auth, cardsRouter);
 app.use(celebrateErrors());
 app.use(errors);
 
-app.use((req, res) => {
-  res.status(constants.HTTP_NOT_FOUND).send({ message: `Path ${req.path} not found` });
-});
+app.use((req, _) => Promise.reject(new NotFoundError(`Path ${req.path} not found`)));
 
 mongoose.connect(DB_URL, {
   useNewUrlParser: true,
